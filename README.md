@@ -24,6 +24,12 @@ shared/store.ts + shared/contracts.ts
 
 Catalog → filtru domeniu/nivel → alegere lecție → întrebare → răspuns și explicație → următoarea întrebare → rezultat → progres și revenire la catalog. Încărcarea, eroarea API, lista goală și revenirea/resetarea au mesaje vizibile; progresul dispare la restart.
 
+## Capturi reale ale demo-ului
+
+Capturi ale catalogului din build-ul static de producție, verificate la desktop și mobile fără overflow vizibil sau erori în consolă: [desktop](docs/screenshots/catalog-desktop.png) · [mobile](docs/screenshots/catalog-mobile.png).
+
+Dovezile exacte pentru arhitectură și flux: [React Context](frontend/learning-context.tsx) · [Playwright E2E](e2e/learning-flow.spec.ts).
+
 ## Criteriul P1: matrice criteriu–fișier–test
 
 | Criteriu | Fișier(e) | Dovadă/test |
@@ -67,3 +73,5 @@ git diff --check
 ## Confidențialitate, IP și limite
 
 Toate textele, întrebările și rezultatele sunt inventate pentru demo; nu se colectează utilizatori, identificatori, cookies sau analytics. Nu introduce date personale ori secrete: guard-ul le respinge, iar progresul este doar în memorie. Conținutul și implementarea sunt demonstrative, fără afirmații despre rezultate educaționale, conformitate, proprietate intelectuală asupra unor surse externe sau disponibilitate de producție. Nu există integrare externă, autentificare, administrare sau furnizori.
+
+Disclosure post-submission: capturile și acest README documentează o copie locală a demo-ului; nu declară un deployment public sau o disponibilitate de producție.
