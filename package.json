@@ -1,0 +1,39 @@
+{
+  "name": "learning-platform-build",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"tsx backend/server.ts\"",
+    "dev:frontend": "vite",
+    "dev:backend": "tsx backend/server.ts",
+    "build": "tsc --noEmit && vite build --config frontend/vite.config.ts",
+    "start": "tsx backend/server.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config frontend/vitest.config.ts",
+    "test:watch": "vitest --config frontend/vitest.config.ts"
+  },
+  "dependencies": {
+    "cors": "latest",
+    "express": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
+    "@types/cors": "latest",
+    "@types/express": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "concurrently": "latest",
+    "jsdom": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "vitest": "latest"
+  }
+}

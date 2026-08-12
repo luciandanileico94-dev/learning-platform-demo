@@ -1,17 +1,23 @@
-# Learning Platform — portfolio demo
+# Atelier de învățare
 
-A clean public portfolio edition of a private TypeScript learning application. The demo will show a responsive React interface, structured domain data and a small safe API surface.
+Demo public, sintetic, pentru un portofoliu React + TypeScript. Interfața în limba română prezintă trei domenii, filtre de nivel, lecții cu cinci întrebări, feedback explicat, progres și resetare.
 
-## Evidence for the tender
+## Pornire
 
-- **React** and **TypeScript / ES6+**
-- REST API integration and typed domain models
-- State management and responsive UI patterns
-- Automated tests and CI
-- Clear README and reproducible local setup
+```bash
+npm install
+npm run dev
+```
 
-## Privacy and scope
+Frontend-ul pornește pe Vite, iar API-ul Express pe `http://localhost:3001`. Pentru verificări: `npm run typecheck`, `npm test`, `npm run build`.
 
-This repository will contain only a selected, anonymised portfolio slice: no credentials, private content, user records, analytics or private Git history.
+## Arhitectură
 
-Source code, screenshots, runnable instructions and a live demonstration will be added to this stable repository URL.
+- `shared/` — contracte TypeScript și store determinist, în memorie;
+- `backend/` — `GET /api/courses`, `GET /api/lessons/:id`, `POST /api/lessons/:id/answer`, `POST /api/courses/:id/complete`;
+- `frontend/` — UI responsive, accesibilă cu tastatura, care folosește API-ul și fallback local fără secrete;
+- `tests/` — contract fără scurgerea cheii de răspuns, flux API/idempotency și smoke test React.
+
+## Limitări
+
+Acesta este un demo offline de portofoliu: datele, utilizatorii, întrebările și textele sunt inventate, iar starea dispare la restart. Nu există autentificare, administrare, conturi, tracking, integrare cu furnizori, conținut extern sau media. Nu este un produs educațional complet și nu include capturi de ecran.
