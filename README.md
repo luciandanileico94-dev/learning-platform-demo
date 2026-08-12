@@ -1,29 +1,28 @@
-# Learningo — catalog de învățare și progres personal
+# Learningo — Telegram Mini App / web preview
 
-Learningo este o platformă web de învățare în limba română, construită pentru trasee scurte și clare: alegi un curs, deschizi o lecție, exersezi, primești explicații și revii la progresul tău.
+Learningo este o aplicație de învățare gamificată, construită pentru utilizare în Telegram Mini App și preview web. Demo-ul public păstrează shell-ul mobil și traseele produsului original: învățare, lecții, dueluri, time-attack, recapitulare, ligă, clasament, magazin, profil, avatar, Moldova și olimpiade.
 
 [Deschide aplicația live →](https://learning-platform-demo-pi.vercel.app)
 
-## Cum funcționează
+## Trasee demonstrabile
 
-- **Catalog:** filtrează cursurile după materie și alege un traseu.
-- **Curs:** vezi lecțiile, durata și progresul acumulat.
-- **Lecție:** parcurge explicațiile și exercițiile de alegere, calcul și ordonare.
-- **Feedback:** răspunsurile greșite afișează explicația și permit retry.
-- **Progres:** lecțiile finalizate adaugă XP, actualizează seria și rămân vizibile după reîncărcarea paginii.
-
-Catalogul seeded include cursuri de matematică și științe, lecții independente și un flux complet care poate fi reluat fără cont.
+- catalog local cu domenii, materii, teme și niveluri;
+- lecții cu carduri de explicații, exerciții, feedback și progres;
+- Battle și Time-attack cu adversari ficționali;
+- recapitulare, clasament, ligă, profil, avatar și magazin;
+- preview pentru curriculum Moldova și olimpiade;
+- interfață RU / RO / EN, optimizată pentru viewport mobil.
 
 ## Date și limite
 
-Catalogul și progresul sunt ficțiuni publice, generate determinist în aplicație. Progresul utilizatorului este păstrat numai în `localStorage` al browserului. Nu există autentificare, conturi reale, Telegram, date personale sau conținut privat. Backend-ul Express rămas în repository este opțional pentru preview local; experiența live funcționează static pe Vercel și nu depinde de un API extern.
+Aplicația folosește un adapter local cu date ficționale și deterministic fixtures. Profilul, XP, monedele, avatarul și progresul sunt păstrate în `localStorage`. Nu sunt folosite autentificare Telegram reală, token-uri, utilizatori, contacte sau conținut privat. Battle, clasamentul, shop-ul și curriculum-ul sunt scenarii locale pentru demonstrație.
 
 ## Stack și rulare
 
-- React 19, TypeScript 7, Vite 8
-- CSS existent, păstrat ca sistem vizual al produsului
-- Vitest + Testing Library pentru unit/integration tests
-- Playwright pentru traseul catalog → curs → lecție → progres
+- React, TypeScript, Vite;
+- CSS-ul original al Mini App-ului: shell întunecat, cards, progress, buttons și responsive mobile layout;
+- Vitest + Testing Library;
+- Playwright pentru desktop și mobile.
 
 ```bash
 npm ci
@@ -34,4 +33,4 @@ npm run build
 npm run e2e
 ```
 
-Aplicația statică este compatibilă cu Vercel. Build-ul folosește `frontend/index.html` și nu necesită variabile de mediu.
+Build-ul Vercel publică `frontend/dist` și nu are nevoie de variabile de mediu.

@@ -1,0 +1,42 @@
+/* Avatar feature — scoped styles. Dark theme (uses global CSS vars). */
+
+.avatar-view {
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--card2);
+  flex: none;
+}
+.avatar-view svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.avatar-hero {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 12px;
+}
+
+.opt-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.opt {
+  padding: 3px;
+  background: var(--card2);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  line-height: 0;
+}
+.opt.sel { border-color: var(--accent); }
+.opt.swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 18px;
+}

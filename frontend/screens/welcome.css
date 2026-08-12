@@ -1,0 +1,98 @@
+/* First-time welcome / onboarding — scoped under .wc */
+
+.welcome.wc {
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+/* Top: brand + language switch */
+.wc .wc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.wc .wc-brand { font-size: 18px; font-weight: 800; letter-spacing: 0.4px; }
+.wc .wc-lang { display: flex; gap: 6px; padding: 4px; background: var(--card2); border-radius: 999px; }
+.wc .wc-lang button {
+  background: transparent; border: none; color: var(--muted);
+  border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: color 0.15s ease, background 0.15s ease;
+}
+.wc .wc-lang button:hover { color: var(--text); }
+.wc .wc-lang button.active {
+  color: #fff; background: linear-gradient(135deg, #5b8cff, #7b5bff);
+  box-shadow: 0 2px 8px rgba(91, 140, 255, 0.4);
+}
+
+/* Hero */
+.wc .wc-hero { position: relative; text-align: center; padding: 30px 0 22px; overflow: hidden; }
+.wc .wc-hero-glow {
+  position: absolute; top: -40%; left: 50%; width: 320px; height: 320px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(91,140,255,0.35) 0%, rgba(123,91,255,0.18) 40%, transparent 70%);
+  filter: blur(8px); pointer-events: none; z-index: 0;
+}
+.wc .wc-hero-emoji {
+  position: relative; z-index: 1; font-size: 72px; line-height: 1;
+  filter: drop-shadow(0 6px 18px rgba(91,140,255,0.45));
+  animation: wc-float 4s ease-in-out infinite;
+}
+.wc .wc-hero-title {
+  position: relative; z-index: 1; margin: 12px 0 0; font-size: 34px; font-weight: 900; letter-spacing: 1px;
+  background: linear-gradient(135deg, #8fb1ff, #b79bff 60%, #ff9ed6);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+}
+.wc .wc-hero-tagline { position: relative; z-index: 1; margin: 10px 0 0; color: var(--muted); font-size: 16px; font-weight: 600; }
+
+/* Feature cards */
+.wc .wc-cards { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.wc .wc-card {
+  display: flex; align-items: center; gap: 14px; background: var(--card);
+  border-radius: 18px; padding: 16px 18px; border: 1px solid rgba(255,255,255,0.05);
+  animation: wc-pop 0.5s ease-out both;
+}
+.wc .wc-card-icon {
+  flex: none; width: 54px; height: 54px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 28px; line-height: 1;
+}
+.wc .wc-card.learn .wc-card-icon {
+  background: linear-gradient(135deg, rgba(91,140,255,0.22), rgba(123,91,255,0.22));
+  box-shadow: inset 0 0 0 1px rgba(123,91,255,0.35);
+}
+.wc .wc-card.rank .wc-card-icon {
+  background: linear-gradient(135deg, rgba(255,204,51,0.20), rgba(255,138,61,0.20));
+  box-shadow: inset 0 0 0 1px rgba(255,204,51,0.35);
+}
+.wc .wc-card.duel .wc-card-icon {
+  background: linear-gradient(135deg, rgba(255,107,107,0.20), rgba(177,91,255,0.20));
+  box-shadow: inset 0 0 0 1px rgba(255,107,107,0.35);
+}
+.wc .wc-card-text { display: flex; flex-direction: column; gap: 3px; }
+.wc .wc-card-name { font-weight: 800; font-size: 16px; }
+.wc .wc-card-body { font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+/* Sticky CTA */
+.wc .wc-actions {
+  position: sticky; bottom: 0; margin-top: 18px;
+  padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg, #0f1116) 70%, transparent); z-index: 5;
+}
+.wc .wc-cta {
+  width: 100%; border: none; border-radius: 16px; padding: 18px;
+  font-size: 18px; font-weight: 800; color: #fff; cursor: pointer;
+  background: linear-gradient(135deg, #5b8cff 0%, #7b5bff 55%, #b15bff 100%);
+  background-size: 200% 200%; box-shadow: 0 10px 28px rgba(91,140,255,0.4);
+  transition: transform 0.12s ease; animation: wc-shift 6s ease infinite;
+}
+.wc .wc-cta:active { transform: scale(0.985); }
+
+@keyframes wc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes wc-pop { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes wc-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wc .wc-hero-emoji, .wc .wc-card, .wc .wc-cta { animation: none; }
+}

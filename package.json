@@ -16,6 +16,8 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
     "cors": "2.8.6",
     "express": "5.2.1",
     "react": "19.2.8",
