@@ -1,15 +1,23 @@
 import { expect, test } from '@playwright/test';
 
-test('learner opens a lesson, answers it, and sees progress', async ({ page }) => {
+test('traseul complet și persistența locală', async ({ page }) => {
   await page.goto('');
-  await expect(page.getByRole('heading', { name: 'Învață ceva mic.' })).toBeVisible();
-  await page.getByRole('button', { name: 'Structura ideii' }).click();
-  await expect(page.getByRole('heading', { name: 'Structura ideii' })).toBeVisible();
-  for (const [index, option] of ['Aleg un verb precis', 'Arată ideea în context', 'Îl citești cu voce tare', 'Repetițiile fără rol', 'O direcție clară'].entries()) {
-    await page.getByRole('button', { name: option }).click();
-    await expect(page.getByRole('status').filter({ hasText: 'Exact.' })).toBeVisible();
-    await page.getByRole('button', { name: index === 4 ? /Vezi rezultatul/ : /Următoarea întrebare/ }).click();
-  }
-  await expect(page.getByRole('heading', { name: 'unei idei noi.' })).toBeVisible();
-  await expect(page.getByText('1/6')).toBeVisible();
+  await page.getByRole('button', { name: /Începe demo-ul/ }).click();
+  await page.getByRole('button', { name: /Școală/ }).click();
+  await page.getByRole('button', { name: /Matematică/ }).click();
+  await page.getByRole('button', { name: /Clasa a VIII-a/ }).click();
+  await page.getByRole('button', { name: /Continuă/ }).click();
+  await page.getByRole('button', { name: /Verifică ce ai înțeles/ }).click();
+  await page.getByRole('button', { name: /Scad 5/ }).click();
+  await page.getByRole('button', { name: /Următorul exercițiu/ }).click();
+  await page.getByLabel('Răspunsul tău').fill('5');
+  await page.getByRole('button', { name: /Verifică/ }).click();
+  await page.getByRole('button', { name: /Următorul exercițiu/ }).click();
+  for (const name of ['Adun 4 la ambele părți', 'Obțin 2x = 14', 'Împart la 2 și obțin x = 7']) await page.getByRole('button', { name: new RegExp(name) }).click();
+  await page.getByRole('button', { name: /Verifică ordinea/ }).click();
+  await page.getByRole('button', { name: /Finalizează lecția/ }).click();
+  await expect(page.getByRole('heading', { name: /care rămâne/ })).toBeVisible();
+  await expect(page.getByText('30 XP')).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('⚡ 30 XP')).toBeVisible();
 });
