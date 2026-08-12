@@ -19,5 +19,6 @@ test('traseul complet și persistența locală', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /care rămâne/ })).toBeVisible();
   await expect(page.getByRole('main').getByText('+30 XP', { exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByText('⚡ 30 XP')).toBeVisible();
+  await expect(page.getByText('⚡ 30 XP', { exact: true })).toBeVisible();
+  await expect(page.getByText('🔥 3 zile', { exact: true })).toBeVisible();
 });

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { lesson } from '../shared/store';
 import { LearningProvider, useLearningContext } from './learning-context';
 import './styles.css';
+import './qa-fixes.css';
 
 type Screen = 'home' | 'school' | 'subject' | 'grade' | 'lesson' | 'done';
 
