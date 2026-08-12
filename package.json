@@ -1,0 +1,42 @@
+{
+  "name": "learning-platform-build",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"tsx backend/server.ts\"",
+    "dev:frontend": "vite",
+    "dev:backend": "tsx backend/server.ts",
+    "build": "tsc --noEmit && vite build --config frontend/vite.config.ts",
+    "start": "tsx backend/server.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config frontend/vitest.config.ts",
+    "test:watch": "vitest --config frontend/vitest.config.ts",
+    "build:static": "VITE_DEMO_MODE=static tsc --noEmit && VITE_DEMO_MODE=static vite build --config frontend/vite.config.ts",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "cors": "2.8.6",
+    "express": "5.2.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.4",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "concurrently": "10.0.4",
+    "jsdom": "30.0.1",
+    "tsx": "4.23.12",
+    "typescript": "7.0.2",
+    "vite": "8.2.1",
+    "vitest": "4.1.10"
+  }
+}
