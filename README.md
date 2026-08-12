@@ -1,23 +1,62 @@
 # Atelier de învățare
 
-Demo public, sintetic, pentru un portofoliu React + TypeScript. Interfața în limba română prezintă trei domenii, filtre de nivel, lecții cu cinci întrebări, feedback explicat, progres și resetare.
+Demo public, determinist și sintetic, pentru dovezi de tender: interfață React + TypeScript în limba română, cu șase lecții, feedback explicat, progres în memorie și filtre.
 
-## Pornire
+## Stack exact
 
-```bash
-npm install
-npm run dev
+React 19.2.8, React DOM 19.2.8, TypeScript 7.0.2, Vite 8.2.1, Express 5.2.1, Vitest 4.1.10, Testing Library, Node 22. Versiunile sunt pin-uite exact în `package.json` și `package-lock.json`; `npm audit` trebuie să rămână la 0 vulnerabilități.
+
+## Arhitectură și flux de date
+
+```text
+shared/store.ts + shared/contracts.ts
+        ├── mod static: bundle Vite → catalog, lecții și răspunsuri sintetice
+        └── mod local: frontend → Express /api → store în memorie
 ```
 
-Frontend-ul pornește pe Vite, iar API-ul Express pe `http://localhost:3001`. Pentru verificări: `npm run typecheck`, `npm test`, `npm run build`.
+- `shared/` este sursa unică pentru contracte și datele demo; `getLesson` nu expune cheia răspunsurilor.
+- `backend/` oferă `GET /api/courses`, `GET /api/lessons/:id`, `POST /api/lessons/:id/answer` și `POST /api/courses/:id/complete`.
+- `frontend/` detectează `VITE_DEMO_MODE=static`; în static folosește datele incluse, iar în local folosește API-ul Express și are fallback local pentru demonstrații offline.
+- `shared/privacy.ts` aplică un guard determinist: payload-urile cu câmpuri/valori de tip secret sau date personale sunt respinse; demo-ul nu persistă date personale.
 
-## Arhitectură
+## Flux funcțional
 
-- `shared/` — contracte TypeScript și store determinist, în memorie;
-- `backend/` — `GET /api/courses`, `GET /api/lessons/:id`, `POST /api/lessons/:id/answer`, `POST /api/courses/:id/complete`;
-- `frontend/` — UI responsive, accesibilă cu tastatura, care folosește API-ul și fallback local fără secrete;
-- `tests/` — contract fără scurgerea cheii de răspuns, flux API/idempotency și smoke test React.
+Catalog → filtru domeniu/nivel → alegere lecție → întrebare → răspuns și explicație → următoarea întrebare → rezultat → progres și revenire la catalog. Încărcarea, eroarea API, lista goală și revenirea/resetarea au mesaje vizibile; progresul dispare la restart.
 
-## Limitări
+## Criteriul P1: matrice criteriu–fișier–test
 
-Acesta este un demo offline de portofoliu: datele, utilizatorii, întrebările și textele sunt inventate, iar starea dispare la restart. Nu există autentificare, administrare, conturi, tracking, integrare cu furnizori, conținut extern sau media. Nu este un produs educațional complet și nu include capturi de ecran.
+| Criteriu | Fișier(e) | Dovadă/test |
+|---|---|---|
+| Date sintetice, contract fără cheie | `shared/store.ts`, `shared/contracts.ts` | `tests/store.test.ts` |
+| API și completare idempotentă | `backend/server.ts` | `tests/api.test.ts` |
+| Mod static cu mesaj vizibil | `frontend/main.tsx`, `frontend/vite.config.ts` | `npm run build:static`; badge static în UI |
+| Mod local cu API Express | `frontend/main.tsx`, `backend/server.ts` | `npm run dev`; `tests/api.test.ts` |
+| Guard privacy/secrete | `shared/privacy.ts`, `backend/server.ts` | typecheck și test API; payload invalid → 400 |
+| Loading/error/empty/reset | `frontend/main.tsx`, `frontend/styles.css` | `tests/app.test.tsx`; verificare manuală în demo |
+| Livrare GitHub Pages | `.github/workflows/pages.yml` | workflow construiește și publică `frontend/dist` |
+
+## Demo local, full-stack și static
+
+```bash
+npm ci
+npm run dev                 # Vite + API Express, http://localhost:5173
+npm run dev:frontend        # doar frontend
+npm run dev:backend         # doar API, http://localhost:3001
+npm run build:static        # bundle Pages cu date sintetice incluse
+```
+
+În UI, modul local spune explicit „folosește API-ul Express”, iar modul static spune explicit „folosește date sintetice incluse în pachet”. URL-ul Pages configurat de workflow este `https://<owner>.github.io/learning-platform-demo/`; nu este declarat live în această copie deoarece owner-ul GitHub nu este disponibil și nu inventez un URL public.
+
+## Verificare
+
+```bash
+npm run typecheck
+npm test
+npm run build
+npm run build:static
+npm audit --audit-level=low
+```
+
+## Confidențialitate, IP și limite
+
+Toate textele, întrebările și rezultatele sunt inventate pentru demo; nu se colectează utilizatori, identificatori, cookies sau analytics. Nu introduce date personale ori secrete: guard-ul le respinge, iar progresul este doar în memorie. Conținutul și implementarea sunt demonstrative, fără afirmații despre rezultate educaționale, conformitate, proprietate intelectuală asupra unor surse externe sau disponibilitate de producție. Nu există integrare externă, autentificare, administrare sau furnizori.

@@ -1,10 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import { answerKey, courses, domains, getLesson, progress } from '../shared/store';
+import { isSafeDemoPayload } from '../shared/privacy';
 
 export const app = express();
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  if (!isSafeDemoPayload(req.body)) return res.status(400).json({ error: 'Demo-ul nu acceptă date personale sau secrete.' });
+  return next();
+});
 
 app.get('/api/courses', (_req, res) => res.json({ domains, courses }));
 app.get('/api/lessons/:id', (req, res) => {
