@@ -4,7 +4,7 @@ Demo public, determinist și sintetic, pentru dovezi de tender: interfață Reac
 
 ## Stack exact
 
-React 19.2.8, React DOM 19.2.8, TypeScript 7.0.2, Vite 8.2.1, Express 5.2.1, Vitest 4.1.10, Testing Library, Node 22. Versiunile sunt pin-uite exact în `package.json` și `package-lock.json`; `npm audit` trebuie să rămână la 0 vulnerabilități.
+React 19.2.8, React DOM 19.2.8, TypeScript 7.0.2, Vite 8.2.1, Express 5.2.1, Vitest 4.1.10, Testing Library, Playwright 1.55.1, Node 22. Versiunile sunt pin-uite exact în `package.json` și `package-lock.json`.
 
 ## Arhitectură și flux de date
 
@@ -17,6 +17,7 @@ shared/store.ts + shared/contracts.ts
 - `shared/` este sursa unică pentru contracte și datele demo; `getLesson` nu expune cheia răspunsurilor.
 - `backend/` oferă `GET /api/courses`, `GET /api/lessons/:id`, `POST /api/lessons/:id/answer` și `POST /api/courses/:id/complete`.
 - `frontend/` detectează `VITE_DEMO_MODE=static`; în static folosește datele incluse, iar în local folosește API-ul Express și are fallback local pentru demonstrații offline.
+- `frontend/learning-context.tsx` păstrează într-un singur React Context modul demo și progresul global, pentru ca fluxul catalog–lecție să nu lege aceste date prin props.
 - `shared/privacy.ts` aplică un guard determinist: payload-urile cu câmpuri/valori de tip secret sau date personale sunt respinse; demo-ul nu persistă date personale.
 
 ## Flux funcțional
@@ -33,6 +34,8 @@ Catalog → filtru domeniu/nivel → alegere lecție → întrebare → răspuns
 | Mod local cu API Express | `frontend/main.tsx`, `backend/server.ts` | `npm run dev`; `tests/api.test.ts` |
 | Guard privacy/secrete | `shared/privacy.ts`, `backend/server.ts` | typecheck și test API; payload invalid → 400 |
 | Loading/error/empty/reset | `frontend/main.tsx`, `frontend/styles.css` | `tests/app.test.tsx`; verificare manuală în demo |
+| React Context | `frontend/learning-context.tsx`, `frontend/main.tsx` | `npm run typecheck`; progresul din UI |
+| Playwright E2E static | `playwright.config.ts`, `e2e/learning-flow.spec.ts` | `npm run e2e` pe desktop și mobile |
 | Livrare GitHub Pages | `.github/workflows/pages.yml` | workflow construiește și publică `frontend/dist` |
 
 ## Demo local, full-stack și static
@@ -43,6 +46,7 @@ npm run dev                 # Vite + API Express, http://localhost:5173
 npm run dev:frontend        # doar frontend
 npm run dev:backend         # doar API, http://localhost:3001
 npm run build:static        # bundle Pages cu date sintetice incluse
+npm run e2e                  # servește build-ul static și testează fluxul pe desktop + mobile
 ```
 
 În UI, modul local spune explicit „folosește API-ul Express”, iar modul static spune explicit „folosește date sintetice incluse în pachet”. URL-ul Pages configurat de workflow este `https://<owner>.github.io/learning-platform-demo/`; nu este declarat live în această copie deoarece owner-ul GitHub nu este disponibil și nu inventez un URL public.
@@ -54,7 +58,10 @@ npm run typecheck
 npm test
 npm run build
 npm run build:static
-npm audit --audit-level=low
+npm run e2e
+npm audit --audit-level=high
+npx playwright install --with-deps chromium  # dacă Chromium nu este instalat
+git diff --check
 ```
 
 ## Confidențialitate, IP și limite

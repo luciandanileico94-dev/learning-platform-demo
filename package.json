@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config frontend/vitest.config.ts",
     "test:watch": "vitest --config frontend/vitest.config.ts",
-    "build:static": "VITE_DEMO_MODE=static tsc --noEmit && VITE_DEMO_MODE=static vite build --config frontend/vite.config.ts"
+    "build:static": "VITE_DEMO_MODE=static tsc --noEmit && VITE_DEMO_MODE=static vite build --config frontend/vite.config.ts",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "cors": "2.8.6",
@@ -21,6 +22,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@playwright/test": "1.55.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.4",

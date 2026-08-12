@@ -2,18 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { AnswerResponse, Course, Domain, Lesson, Progress } from '../shared/contracts';
 import { answerKey, courses as localCourses, domains as localDomains, getLesson } from '../shared/store';
+import { LearningProvider, useLearningContext } from './learning-context';
 import './styles.css';
 
 type Catalog = { domains: Domain[]; courses: Course[] };
-const localProgress: Progress = { completedCourseIds: [], total: 6 };
-const staticMode = import.meta.env.VITE_DEMO_MODE === 'static';
 const api = async <T,>(path: string, options?: RequestInit): Promise<T> => {
   const response = await fetch(`/api${path}`, { headers: { 'Content-Type': 'application/json' }, ...options });
   if (!response.ok) throw new Error('Nu am putut încărca datele.');
   return response.json() as Promise<T>;
 };
 
-export function App() {
+function LearningExperience() {
+  const { isStatic: staticMode, progress, markCourseCompleted, replaceProgress } = useLearningContext();
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [selectedDomain, setSelectedDomain] = useState('all');
   const [selectedLevel, setSelectedLevel] = useState('Toate nivelurile');
@@ -23,7 +23,6 @@ export function App() {
   const [answer, setAnswer] = useState<AnswerResponse | null>(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
-  const [progress, setProgress] = useState(localProgress);
   const [error, setError] = useState('');
   const [lessonError, setLessonError] = useState('');
 
@@ -50,7 +49,7 @@ export function App() {
     try { setAnswer(await api<AnswerResponse>(`/lessons/${lesson.id}/answer`, { method: 'POST', body: JSON.stringify({ questionIndex: question, optionIndex }) })); }
     catch { const key = answerKey(lesson.id, question); if (key) setAnswer({ correct: key.answer === optionIndex, explanation: key.explanation, correctOption: key.answer, score: key.answer === optionIndex ? 1 : 0 }); }
   };
-  const next = async () => { if (!lesson || !answer || !course) return; setScore((s) => s + answer.score); if (question < lesson.questions.length - 1) { setQuestion((n) => n + 1); setAnswer(null); } else { setDone(true); if (!staticMode) { try { setProgress(await api<Progress>(`/courses/${course.id}/complete`, { method: 'POST' })); } catch { setProgress((p) => ({ ...p, completedCourseIds: p.completedCourseIds.includes(course.id) ? p.completedCourseIds : [...p.completedCourseIds, course.id] })); } } else setProgress((p) => ({ ...p, completedCourseIds: p.completedCourseIds.includes(course.id) ? p.completedCourseIds : [...p.completedCourseIds, course.id] })); } };
+  const next = async () => { if (!lesson || !answer || !course) return; setScore((s) => s + answer.score); if (question < lesson.questions.length - 1) { setQuestion((n) => n + 1); setAnswer(null); } else { setDone(true); if (!staticMode) { try { replaceProgress(await api<Progress>(`/courses/${course.id}/complete`, { method: 'POST' })); } catch { markCourseCompleted(course.id); } } else markCourseCompleted(course.id); } };
   const reset = () => { setCourse(null); setLesson(null); setLessonError(''); setDone(false); setAnswer(null); setQuestion(0); setScore(0); setSelectedDomain('all'); setSelectedLevel('Toate nivelurile'); setError(''); };
   if (!catalog) return <main className="shell"><p className="eyebrow">ATELIER / ÎNVĂȚARE</p><h1>Idei mici.<br /><em>Progres real.</em></h1><p className="muted">Se pregătește catalogul…</p></main>;
   return <main className="shell">
@@ -63,6 +62,10 @@ export function App() {
     {course && lesson && !done && <section className="lesson"><button className="back" onClick={reset}>← Înapoi la catalog</button><p className="eyebrow">LECȚIA {question + 1} / {lesson.questions.length}</p><div className="lesson-heading"><h1>{lesson.title}</h1><p>{lesson.intro}</p></div><div className="question"><h2>{lesson.questions[question].prompt}</h2><div className="options">{lesson.questions[question].options.map((option, i) => <button className={answer ? i === answer.correctOption ? 'right' : 'dim' : ''} disabled={Boolean(answer)} onClick={() => submit(i)} key={option}>{option}</button>)}</div>{answer && <div className={`feedback ${answer.correct ? 'success' : 'try'}`} role="status"><strong>{answer.correct ? 'Exact.' : 'Aproape.'}</strong><span>{answer.explanation}</span><button onClick={next}>{question === lesson.questions.length - 1 ? 'Vezi rezultatul' : 'Următoarea întrebare'} →</button></div>}</div></section>}
     {course && done && <section className="result"><div className="result-icon">✦</div><p className="eyebrow">LECȚIE FINALIZATĂ</p><h1>Ai făcut loc<br /><em>unei idei noi.</em></h1><p>Ai răspuns corect la {score + (answer?.score ?? 0)} din {lesson?.questions.length ?? 0} întrebări.</p><button className="primary" onClick={reset}>Alege următoarea lecție →</button></section>}
   </main>;
+}
+
+export function App() {
+  return <LearningProvider><LearningExperience /></LearningProvider>;
 }
 
 const root = document.getElementById('root');
