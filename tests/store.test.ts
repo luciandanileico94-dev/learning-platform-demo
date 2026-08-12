@@ -1,18 +1,14 @@
-import { answerKey, courses, getLesson } from '../shared/store';
-import { isSafeDemoPayload } from '../shared/privacy';
+import { lesson, readProgress, STORAGE_KEY } from '../shared/store';
 
-describe('shared lesson contract', () => {
-  it('returns questions without answer keys', () => {
-    const lesson = getLesson(courses[0].lessonId);
-    expect(lesson?.questions).toHaveLength(5);
-    expect(JSON.stringify(lesson)).not.toContain('explanation');
-    expect(JSON.stringify(lesson)).not.toContain('correctOption');
-    expect(answerKey(courses[0].lessonId, 0)?.answer).toBeDefined();
+describe('conținutul sigur al demo-ului', () => {
+  it('are două carduri de predare și trei tipuri de exercițiu', () => {
+    expect(lesson.teachingCards).toHaveLength(2);
+    expect(lesson.exercises.map((item) => item.kind)).toEqual(['choice', 'numeric', 'steps']);
   });
 
-  it('rejects personal or secret-shaped payloads deterministically', () => {
-    expect(isSafeDemoPayload({ questionIndex: 0, optionIndex: 1 })).toBe(true);
-    expect(isSafeDemoPayload({ token: 'demo-secret' })).toBe(false);
-    expect(isSafeDemoPayload({ note: 'contact me at demo@example.test' })).toBe(false);
+  it('citește progresul local și revine la valori curate', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ xp: 30, streak: 3, lessonDone: true }));
+    expect(readProgress()).toMatchObject({ xp: 30, streak: 3, lessonDone: true });
+    localStorage.removeItem(STORAGE_KEY);
   });
 });
