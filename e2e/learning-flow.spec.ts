@@ -17,7 +17,7 @@ test('traseul complet și persistența locală', async ({ page }) => {
   await page.getByRole('button', { name: /Verifică ordinea/ }).click();
   await page.getByRole('button', { name: /Finalizează lecția/ }).click();
   await expect(page.getByRole('heading', { name: /care rămâne/ })).toBeVisible();
-  await expect(page.getByText('30 XP')).toBeVisible();
+  await expect(page.getByRole('main').getByText('+30 XP', { exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByText('⚡ 30 XP')).toBeVisible();
 });
