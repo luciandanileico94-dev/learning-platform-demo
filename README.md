@@ -55,7 +55,7 @@ npm run e2e                  # servește build-ul static și testează fluxul pe
 
 ```bash
 npm run typecheck
-npm test
+npm test -- --run
 npm run build
 npm run build:static
 npm run e2e
