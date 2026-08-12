@@ -1,29 +1,37 @@
-# Learningo - demo de portofoliu
+# Learningo — catalog de învățare și progres personal
 
-Demo public, standalone, în limba română, inspirat de un produs de învățare. Nu este botul real și nu pretinde că se conectează la Telegram.
+Learningo este o platformă web de învățare în limba română, construită pentru trasee scurte și clare: alegi un curs, deschizi o lecție, exersezi, primești explicații și revii la progresul tău.
 
-## Domeniu exact
+[Deschide aplicația live →](https://learning-platform-demo-pi.vercel.app)
 
-Demo-ul arată un singur traseu de aproximativ un minut: Școală, Matematică, clasa a VIII-a, lecția „Ecuații liniare”. Include două carduri de predare și trei interacțiuni: alegere multiplă, răspuns numeric și ordonarea pașilor. Un răspuns greșit afișează explicația și permite retry. La final se acordă 30 XP, se afișează seria de 3 zile, iar lecția este marcată ca finalizată.
+## Cum funcționează
 
-Nu există autentificare, Telegram, conturi, catalog generic, admin, date reale sau server necesar. Progresul este sintetic și se păstrează numai în `localStorage` al browserului. Controlul „Resetează demo” îl șterge.
+- **Catalog:** filtrează cursurile după materie și alege un traseu.
+- **Curs:** vezi lecțiile, durata și progresul acumulat.
+- **Lecție:** parcurge explicațiile și exercițiile de alegere, calcul și ordonare.
+- **Feedback:** răspunsurile greșite afișează explicația și permit retry.
+- **Progres:** lecțiile finalizate adaugă XP, actualizează seria și rămân vizibile după reîncărcarea paginii.
+
+Catalogul seeded include cursuri de matematică și științe, lecții independente și un flux complet care poate fi reluat fără cont.
+
+## Date și limite
+
+Catalogul și progresul sunt ficțiuni publice, generate determinist în aplicație. Progresul utilizatorului este păstrat numai în `localStorage` al browserului. Nu există autentificare, conturi reale, Telegram, date personale sau conținut privat. Backend-ul Express rămas în repository este opțional pentru preview local; experiența live funcționează static pe Vercel și nu depinde de un API extern.
 
 ## Stack și rulare
 
 - React 19, TypeScript 7, Vite 8
-- CSS scris pentru acest demo, fără bibliotecă UI grea
-- Vitest și Testing Library pentru testele unitare, Playwright pentru traseul E2E
+- CSS existent, păstrat ca sistem vizual al produsului
+- Vitest + Testing Library pentru unit/integration tests
+- Playwright pentru traseul catalog → curs → lecție → progres
 
 ```bash
 npm ci
 npm run dev:frontend
 npm test
+npm run typecheck
 npm run build
 npm run e2e
 ```
 
-Aplicația statică este compatibilă cu Vercel. Configurația Vite folosește `frontend/index.html` și nu are nevoie de variabile de mediu sau API extern. `backend/server.ts` este păstrat doar pentru un preview local opțional și nu este folosit de experiența publică.
-
-## Date sigure
-
-Codul și conținutul sunt o implementare clean-room cu date sintetice. Nu conține tokenuri, ID-uri Telegram, utilizatori reali, progres stocat în afara browserului, căi private sau infrastructură de generare a conținutului.
+Aplicația statică este compatibilă cu Vercel. Build-ul folosește `frontend/index.html` și nu necesită variabile de mediu.

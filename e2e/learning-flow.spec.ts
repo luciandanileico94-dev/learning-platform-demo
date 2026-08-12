@@ -2,12 +2,11 @@ import { expect, test } from '@playwright/test';
 
 test('traseul complet și persistența locală', async ({ page }) => {
   await page.goto('');
-  await page.getByRole('button', { name: /Începe demo-ul/ }).click();
-  await page.getByRole('button', { name: /Școală/ }).click();
-  await page.getByRole('button', { name: /Matematică/ }).click();
-  await page.getByRole('button', { name: /Clasa a VIII-a/ }).click();
+  await page.getByRole('button', { name: /Vezi catalogul/ }).click();
+  await page.getByRole('button', { name: /Vezi cursul: Matematică pentru gimnaziu/ }).click();
+  await page.getByRole('button', { name: /Ecuații liniare/ }).click();
   await page.getByRole('button', { name: /Continuă/ }).click();
-  await page.getByRole('button', { name: /Verifică ce ai înțeles/ }).click();
+  await page.getByRole('button', { name: /Începe exercițiul/ }).click();
   await page.getByRole('button', { name: /Scad 5/ }).click();
   await page.getByRole('button', { name: /Următorul exercițiu/ }).click();
   await page.getByLabel('Răspunsul tău').fill('5');
